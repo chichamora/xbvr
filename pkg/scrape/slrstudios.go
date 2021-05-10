@@ -14,7 +14,7 @@ import (
 	"github.com/xbapps/xbvr/pkg/models"
 )
 
-func SexLikeReal(wg *sync.WaitGroup, updateSite bool, knownScenes []string, out chan<- models.ScrapedScene, scraperID string, siteID string, company string) error {
+func SexLikeReal(wg *sync.WaitGroup, updateSite bool, knownScenes []string, out chan<- models.ScrapedScene, slrId string, scraperID string, siteID string, company string) error {
 	defer wg.Done()
 	logScrapeStart(scraperID, siteID)
 
@@ -188,7 +188,7 @@ func SexLikeReal(wg *sync.WaitGroup, updateSite bool, knownScenes []string, out 
 		}
 	})
 
-	siteCollector.Visit("https://www.sexlikereal.com/studios/" + scraperID + "?sort=most_recent")
+	siteCollector.Visit("https://www.sexlikereal.com/studios/" + slrId + "?sort=most_recent")
 
 	if updateSite {
 		updateSiteLastUpdate(scraperID)
@@ -198,12 +198,16 @@ func SexLikeReal(wg *sync.WaitGroup, updateSite bool, knownScenes []string, out 
 }
 
 func addSLRScraper(id string, name string, company string, avatarURL string) {
+	addSLRScraperWithAlternativeId(id, id, name, company, avatarURL)
+}
+
+func addSLRScraperWithAlternativeId(slrId string, id string, name string, company string, avatarURL string) {
 	suffixedName := name
 	if company != "SexLikeReal" {
 		suffixedName += " (SLR)"
 	}
 	registerScraper(id, suffixedName, avatarURL, func(wg *sync.WaitGroup, updateSite bool, knownScenes []string, out chan<- models.ScrapedScene) error {
-		return SexLikeReal(wg, updateSite, knownScenes, out, id, name, company)
+		return SexLikeReal(wg, updateSite, knownScenes, out, slrId, id, name, company)
 	})
 }
 
@@ -257,6 +261,7 @@ func init() {
 	addSLRScraper("vr-fan-service", "VRFanService", "VRFanService", "https://cdn-vr.sexlikereal.com/images/studio_creatives/logotypes/1/153/logo_crop_1619422412.png")
 	addSLRScraper("vrfirsttimer", "VRFirstTimer", "VRFirstTimer", "https://mcdn.vrporn.com/files/20200511115233/VRFirstTimers_Logo.jpg")
 	addSLRScraper("vrpornjack", "VRPornJack", "VRPornJack", "https://mcdn.vrporn.com/files/20210330121852/VRPORNJACK_Logo-400x400.png")
+	addSLRScraperWithAlternativeId("vrlatina", "vrlatina-slr", "VRLatina", "VRLatina", "https://pbs.twimg.com/profile_images/979329978750898176/074YPl3H_200x200.jpg")
 	addSLRScraper("vrpussyvision", "VRpussyVision", "VRpussyVision", "https://mcdn.vrporn.com/files/20180313160830/vrpussyvision-square-banner.png")
 	addSLRScraper("vrsexperts", "VRSexperts", "VRSexperts", "https://mcdn.vrporn.com/files/20190812141431/vrsexpertslogo2.jpg")
 	addSLRScraper("vrsolos", "VRSolos", "VRSolos", "https://mcdn.vrporn.com/files/20191226092954/VRSolos_Logo.jpg")
