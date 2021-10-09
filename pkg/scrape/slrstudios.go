@@ -14,7 +14,7 @@ import (
 	"github.com/xbapps/xbvr/pkg/models"
 )
 
-func SexLikeReal(wg *sync.WaitGroup, updateSite bool, knownScenes []string, out chan<- models.ScrapedScene, scraperID string, siteID string, company string) error {
+func SexLikeReal(wg *sync.WaitGroup, updateSite bool, knownScenes []string, out chan<- models.ScrapedScene, slrId string, scraperID string, siteID string, company string) error {
 	defer wg.Done()
 	logScrapeStart(scraperID, siteID)
 
@@ -195,7 +195,7 @@ func SexLikeReal(wg *sync.WaitGroup, updateSite bool, knownScenes []string, out 
 		}
 	})
 
-	siteCollector.Visit("https://www.sexlikereal.com/studios/" + scraperID + "?sort=most_recent")
+	siteCollector.Visit("https://www.sexlikereal.com/studios/" + slrId + "?sort=most_recent")
 
 	if updateSite {
 		updateSiteLastUpdate(scraperID)
@@ -205,12 +205,16 @@ func SexLikeReal(wg *sync.WaitGroup, updateSite bool, knownScenes []string, out 
 }
 
 func addSLRScraper(id string, name string, company string, avatarURL string) {
+	addSLRScraperWithAlternativeId(id, id, name, company, avatarURL)
+}
+
+func addSLRScraperWithAlternativeId(slrId string, id string, name string, company string, avatarURL string) {
 	suffixedName := name
 	if company != "SexLikeReal" {
 		suffixedName += " (SLR)"
 	}
 	registerScraper(id, suffixedName, avatarURL, func(wg *sync.WaitGroup, updateSite bool, knownScenes []string, out chan<- models.ScrapedScene) error {
-		return SexLikeReal(wg, updateSite, knownScenes, out, id, name, company)
+		return SexLikeReal(wg, updateSite, knownScenes, out, slrId, id, suffixedName, company)
 	})
 }
 
@@ -234,6 +238,7 @@ func init() {
 	addSLRScraper("herfirstvr", "HerFirstVR", "HerFirstVR", "https://www.sexlikereal.com/s/refactor/images/favicons/android-icon-192x192.png")
 	addSLRScraper("holivr", "HoliVR", "HoliVR", "https://mcdn.vrporn.com/files/20170519145416/Holi_400x400.jpg")
 	addSLRScraper("hentaivr", "HentaiVR", "HentaiVR", "https://pbs.twimg.com/profile_images/1394712735854874632/ULktf61I_400x400.jpg")
+	addSLRScraperWithAlternativeId("hologirlsvr", "hologirlsvr-slr", "HoloGirlsVR", "HoloGirlsVR", "https://pbs.twimg.com/profile_images/836310876797837312/Wb3-FTxD_200x200.jpg")
 	addSLRScraper("hookfer", "Hookfer", "Hookfer", "https://mcdn.vrporn.com/files/20201116170637/400x400-Hookfer-logo.jpg")
 	addSLRScraper("istripper", "iStripper", "TotemCore Ltd", "https://www.istripper.com/favicons/istripper/apple-icon-120x120.png")
 	addSLRScraper("jimmydraws", "JimmyDraws", "Jimmy Draws", "https://mcdn.vrporn.com/files/20190821145930/iLPJW6J7_400x400.png")
@@ -255,6 +260,7 @@ func init() {
 	addSLRScraper("ps-porn", "PS-Porn", "Paula Shy", "https://mcdn.vrporn.com/files/20201221090642/PS-Porn-400x400.jpg")
 	addSLRScraper("pvrstudio", "PVRStudio", "PVRStudio", "https://pvr.fun/uploads/2019/10/08/084230gbctdepe7kovu4hs.jpg")
 	addSLRScraper("realhotvr", "RealHotVR", "RealHotVR", "https://images.povr.com/assets/logos/channels/0/3/3835/200.svg")
+	addSLRScraperWithAlternativeId("realitylovers", "realitylovers-slr", "RealityLovers", "RealityLovers", "http://static.rlcontent.com/shared/VR/common/favicons/apple-icon-180x180.png")
 	addSLRScraper("screwboxvr", "ScrewBoxVR", "ScrewBox", "https://pbs.twimg.com/profile_images/1137432770936918016/ycL3ag5c_200x200.png")
 	addSLRScraper("sodcreate", "SodCreate", "SodCreate", "https://cdn-vr.sexlikereal.com/images/studio_creatives/logotypes/1/216/logo_crop_1606869217.png")
 	addSLRScraper("stockingsvr", "StockingsVR", "StockingsVR", "https://mcdn.vrporn.com/files/20171107092330/stockingsvr_logo_vr_porn_studio_vrporn.com_virtual_reality1-1.png")
@@ -271,6 +277,8 @@ func init() {
 	addSLRScraper("vr-fan-service", "VRFanService", "VRFanService", "https://cdn-vr.sexlikereal.com/images/studio_creatives/logotypes/1/153/logo_crop_1619422412.png")
 	addSLRScraper("vrfirsttimer", "VRFirstTimer", "VRFirstTimer", "https://mcdn.vrporn.com/files/20200511115233/VRFirstTimers_Logo.jpg")
 	addSLRScraper("vrpornjack", "VRPornJack", "VRPornJack", "https://mcdn.vrporn.com/files/20210330121852/VRPORNJACK_Logo-400x400.png")
+	addSLRScraperWithAlternativeId("vrlatina", "vrlatina-slr", "VRLatina", "VRLatina", "https://pbs.twimg.com/profile_images/979329978750898176/074YPl3H_200x200.jpg")
+	addSLRScraperWithAlternativeId("vrpfilms", "vrpfilms-slr", "VRPFilms", "VRPFilms", "https://vrpfilms.com/storage/settings/March2021/Z0krYIQBMwSJ4R1eCnv1.png")
 	addSLRScraper("vrpussyvision", "VRpussyVision", "VRpussyVision", "https://mcdn.vrporn.com/files/20180313160830/vrpussyvision-square-banner.png")
 	addSLRScraper("vrsexperts", "VRSexperts", "VRSexperts", "https://mcdn.vrporn.com/files/20190812141431/vrsexpertslogo2.jpg")
 	addSLRScraper("vrsolos", "VRSolos", "VRSolos", "https://mcdn.vrporn.com/files/20191226092954/VRSolos_Logo.jpg")
