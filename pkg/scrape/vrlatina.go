@@ -15,7 +15,7 @@ import (
 
 func VRLatina(wg *sync.WaitGroup, updateSite bool, knownScenes []string, out chan<- models.ScrapedScene) error {
 	defer wg.Done()
-	scraperID := "vrlatina"
+	scraperID := "vrlatina-site"
 	siteID := "VRLatina"
 	logScrapeStart(scraperID, siteID)
 
@@ -91,7 +91,7 @@ func VRLatina(wg *sync.WaitGroup, updateSite bool, knownScenes []string, out cha
 		matches := r.FindStringSubmatch(url)
 		if matches != nil {
 			sc.SiteID = matches[1]
-			sc.SceneID = fmt.Sprintf("vrlatina-%v", sc.SiteID)
+			sc.SceneID = fmt.Sprintf("vrlatina-site-%v", sc.SiteID)
 
 			// save only if we got a SceneID
 			out <- sc
@@ -122,5 +122,5 @@ func VRLatina(wg *sync.WaitGroup, updateSite bool, knownScenes []string, out cha
 }
 
 func init() {
-	registerScraper("vrlatina", "VRLatina", "https://pbs.twimg.com/profile_images/979329978750898176/074YPl3H_200x200.jpg", VRLatina)
+	registerScraper("vrlatina-site", "VRLatina", "https://pbs.twimg.com/profile_images/979329978750898176/074YPl3H_200x200.jpg", VRLatina)
 }
