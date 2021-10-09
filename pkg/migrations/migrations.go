@@ -576,6 +576,72 @@ func Migrate() {
 				return nil
 			},
 		},
+		{
+			ID: "0027-vrlatina-site-name-change",
+			Migrate: func(tx *gorm.DB) error {
+				// Since we're adding VRLatina SLR scraper, we are changing
+				// the naming convention of the normal site scraper
+				var scenes []models.Scene
+				db.Where("site = ?", "VRLatina").Find(&scenes)
+				siteId := regexp.MustCompile(`^vrlatina-(\d+)$`)
+				for _, scene := range scenes {
+					matches := siteId.FindStringSubmatch(scene.SceneID)
+					if len(matches) == 2 {
+						scene.SceneID = fmt.Sprintf("vrlatina-site-%v", matches[1])
+						scene.Save()
+					}
+				}
+				// We have to specify the table instead of using models.Site
+				// because of a bug with updating primary id field in Gorm, see
+				// https://github.com/go-gorm/gorm/issues/2473
+				db.Table("sites").Where("id = ?", "vrlatina").Update("id", "vrlatina-site")
+				return nil
+			},
+		},
+		{
+			ID: "0027-hologirls-site-name-change",
+			Migrate: func(tx *gorm.DB) error {
+				// Since we're adding VRLatina SLR scraper, we are changing
+				// the naming convention of the normal site scraper
+				var scenes []models.Scene
+				db.Where("site = ?", "HoloGirlsVR").Find(&scenes)
+				siteId := regexp.MustCompile(`^hologirlsvr-(\d+)$`)
+				for _, scene := range scenes {
+					matches := siteId.FindStringSubmatch(scene.SceneID)
+					if len(matches) == 2 {
+						scene.SceneID = fmt.Sprintf("hologirlsvr-site-%v", matches[1])
+						scene.Save()
+					}
+				}
+				// We have to specify the table instead of using models.Site
+				// because of a bug with updating primary id field in Gorm, see
+				// https://github.com/go-gorm/gorm/issues/2473
+				db.Table("sites").Where("id = ?", "hologirlsvr").Update("id", "hologirlsvr-site")
+				return nil
+			},
+		},
+		{
+			ID: "0027-realitylovers-site-name-change",
+			Migrate: func(tx *gorm.DB) error {
+				// Since we're adding VRLatina SLR scraper, we are changing
+				// the naming convention of the normal site scraper
+				var scenes []models.Scene
+				db.Where("site = ?", "RealityLovers").Find(&scenes)
+				siteId := regexp.MustCompile(`^realitylovers-(\d+)$`)
+				for _, scene := range scenes {
+					matches := siteId.FindStringSubmatch(scene.SceneID)
+					if len(matches) == 2 {
+						scene.SceneID = fmt.Sprintf("realitylovers-site-%v", matches[1])
+						scene.Save()
+					}
+				}
+				// We have to specify the table instead of using models.Site
+				// because of a bug with updating primary id field in Gorm, see
+				// https://github.com/go-gorm/gorm/issues/2473
+				db.Table("sites").Where("id = ?", "realitylovers").Update("id", "realitylovers-site")
+				return nil
+			},
+		},
 	})
 
 	if err := m.Migrate(); err != nil {
