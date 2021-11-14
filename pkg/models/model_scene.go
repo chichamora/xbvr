@@ -272,6 +272,7 @@ func (o *Scene) UpdateStatus() {
 		var totalFileSize int64
 		for j := range files {
 			totalFileSize = totalFileSize + files[j].Size
+			log.Info("Scanning file", files[j].Filename)
 
 			if files[j].Type == "script" {
 				scripts = scripts + 1
@@ -366,6 +367,7 @@ func (o *Scene) UpdateStatus() {
 	}
 
 	if changed {
+		common.Log.Info("File changed")
 		o.Save()
 	}
 }
