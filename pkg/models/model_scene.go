@@ -289,11 +289,13 @@ func (o *Scene) UpdateStatus() {
 						newestFileDate = files[j].CreatedTime
 					}
 					if !o.IsAccessible {
+						common.Log.Debug("Flipped IsAccessible to true")
 						o.IsAccessible = true
 						changed = true
 					}
 				} else {
 					if o.IsAccessible {
+						common.Log.Debug("Flipped IsAccessible to false")
 						o.IsAccessible = false
 						changed = true
 					}
@@ -302,53 +304,63 @@ func (o *Scene) UpdateStatus() {
 		}
 
 		if totalFileSize != o.TotalFileSize {
+			common.Log.Debug("Total file size changed", totalFileSize, o.TotalFileSize)
 			o.TotalFileSize = totalFileSize
 			changed = true
 		}
 
 		if scripts > 0 && o.IsScripted == false {
+			common.Log.Debug("Flipped IsScripted to true")
 			o.IsScripted = true
 			changed = true
 		}
 
 		if scripts == 0 && o.IsScripted == true {
+			common.Log.Debug("Flipped IsScripted to false")
 			o.IsScripted = false
 			changed = true
 		}
 
 		if videos > 0 && o.IsAvailable == false {
+			common.Log.Debug("Flipped IsAvailable to true")
 			o.IsAvailable = true
 			changed = true
 		}
 
 		if videos == 0 && o.IsAvailable == true {
+			common.Log.Debug("Flipped IsAvailable to false")
 			o.IsAvailable = false
 			changed = true
 		}
 
 		if !newestFileDate.Equal(o.AddedDate) && !newestFileDate.IsZero() {
+			common.Log.Debug("AddedDate changed", newestFileDate, o.AddedDate)
 			o.AddedDate = newestFileDate
 			changed = true
 		}
 	} else {
 		if o.IsAvailable {
+			common.Log.Debug("No files, flipped IsAvailable to false")
 			o.IsAvailable = false
 			changed = true
 		}
 
 		if o.IsScripted == true {
+			common.Log.Debug("No files, flipped IsScripted to false")
 			o.IsScripted = false
 			changed = true
 		}
 	}
 
 	if o.HasVideoPreview && !o.PreviewExists() {
+		common.Log.Debug("Flipped HasViewPreview to false")
 		o.HasVideoPreview = false
 		changed = true
 	}
 
 	totalWatchTime := o.GetTotalWatchTime()
 	if o.TotalWatchTime != totalWatchTime {
+		common.Log.Debug("TotalWatchTime changed", totalWatchTime, o.TotalWatchTime)
 		o.TotalWatchTime = totalWatchTime
 		changed = true
 	}
