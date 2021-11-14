@@ -289,13 +289,13 @@ func (o *Scene) UpdateStatus() {
 						newestFileDate = files[j].CreatedTime
 					}
 					if !o.IsAccessible {
-						log.Info("Flipped IsAccessible to true")
+						common.Log.Info("Flipped IsAccessible to true")
 						o.IsAccessible = true
 						changed = true
 					}
 				} else {
 					if o.IsAccessible {
-						log.Info("Flipped IsAccessible to false")
+						common.Log.Info("Flipped IsAccessible to false")
 						o.IsAccessible = false
 						changed = true
 					}
@@ -304,63 +304,63 @@ func (o *Scene) UpdateStatus() {
 		}
 
 		if totalFileSize != o.TotalFileSize {
-			log.Info("Total file size changed", totalFileSize, o.TotalFileSize)
+			common.Log.Info("Total file size changed", totalFileSize, o.TotalFileSize)
 			o.TotalFileSize = totalFileSize
 			changed = true
 		}
 
 		if scripts > 0 && o.IsScripted == false {
-			log.Info("Flipped IsScripted to true")
+			common.Log.Info("Flipped IsScripted to true")
 			o.IsScripted = true
 			changed = true
 		}
 
 		if scripts == 0 && o.IsScripted == true {
-			log.Info("Flipped IsScripted to false")
+			common.Log.Info("Flipped IsScripted to false")
 			o.IsScripted = false
 			changed = true
 		}
 
 		if videos > 0 && o.IsAvailable == false {
-			log.Info("Flipped IsAvailable to true")
+			common.Log.Info("Flipped IsAvailable to true")
 			o.IsAvailable = true
 			changed = true
 		}
 
 		if videos == 0 && o.IsAvailable == true {
-			log.Info("Flipped IsAvailable to false")
+			common.Log.Info("Flipped IsAvailable to false")
 			o.IsAvailable = false
 			changed = true
 		}
 
 		if !newestFileDate.Equal(o.AddedDate) && !newestFileDate.IsZero() {
-			log.Info("AddedDate changed", newestFileDate, o.AddedDate)
+			common.Log.Info("AddedDate changed", newestFileDate, o.AddedDate)
 			o.AddedDate = newestFileDate
 			changed = true
 		}
 	} else {
 		if o.IsAvailable {
-			log.Info("No files, flipped IsAvailable to false")
+			common.Log.Info("No files, flipped IsAvailable to false")
 			o.IsAvailable = false
 			changed = true
 		}
 
 		if o.IsScripted == true {
-			log.Info("No files, flipped IsScripted to false")
+			common.Log.Info("No files, flipped IsScripted to false")
 			o.IsScripted = false
 			changed = true
 		}
 	}
 
 	if o.HasVideoPreview && !o.PreviewExists() {
-		log.Info("Flipped HasViewPreview to false")
+		common.Log.Info("Flipped HasViewPreview to false")
 		o.HasVideoPreview = false
 		changed = true
 	}
 
 	totalWatchTime := o.GetTotalWatchTime()
 	if o.TotalWatchTime != totalWatchTime {
-		log.Info("TotalWatchTime changed", totalWatchTime, o.TotalWatchTime)
+		common.Log.Info("TotalWatchTime changed", totalWatchTime, o.TotalWatchTime)
 		o.TotalWatchTime = totalWatchTime
 		changed = true
 	}
