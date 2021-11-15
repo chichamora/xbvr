@@ -22,9 +22,9 @@ type EnvConfigSpec struct {
 	UIPassword              string        `envconfig:"UI_PASSWORD" required:"false"`
 	DisableAnalytics        bool          `envconfig:"DISABLE_ANALYTICS" default:"false"`
 	DatabaseURL             string        `envconfig:"DATABASE_URL" required:"false" default:""`
-	DatabaseMaxIdleConns    int           `envconfig:"DATABASE_MAX_IDLE_CONNS" required:"false" default:2`
-	DatabaseMaxOpenConns    int           `envconfig:"DATABASE_MAX_OPEN_CONNS" required:"false" default:0`
-	DatabaseConnMaxLifetime time.Duration `envconfig:"DATABASE_CONN_MAX_LIFETIME" required:"false" default:0`
+	DatabaseMaxIdleConns    int           `envconfig:"DATABASE_MAX_IDLE_CONNS" required:"false" default:"2"`
+	DatabaseMaxOpenConns    int           `envconfig:"DATABASE_MAX_OPEN_CONNS" required:"false" default:"0"`
+	DatabaseConnMaxLifetime time.Duration `envconfig:"DATABASE_CONN_MAX_LIFETIME" required:"false" default:"0"`
 }
 
 var EnvConfig EnvConfigSpec
