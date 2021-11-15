@@ -17,7 +17,6 @@ type Site struct {
 
 func (i *Site) Save() error {
 	db, _ := GetDB()
-	defer db.Close()
 
 	var err error
 	err = retry.Do(
@@ -39,14 +38,12 @@ func (i *Site) Save() error {
 
 func (i *Site) GetIfExist(id string) error {
 	db, _ := GetDB()
-	defer db.Close()
 
 	return db.Where(&Site{ID: id}).First(i).Error
 }
 
 func InitSites() {
 	db, _ := GetDB()
-	defer db.Close()
 
 	scrapers := GetScrapers()
 	for i := range scrapers {

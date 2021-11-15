@@ -31,7 +31,6 @@ func GetMetric(name string) (*whisper.Whisper, error) {
 
 func AddMetricPoint(name string, value float64) error {
 	db, err := GetMetric(name)
-	defer db.Close()
 	if err != nil {
 		return err
 	}

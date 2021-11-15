@@ -15,7 +15,6 @@ var client posthog.Client
 
 func GenerateID() {
 	db, _ := models.GetDB()
-	defer db.Close()
 
 	// Check if already exists, generate new if needed
 	var obj models.KV

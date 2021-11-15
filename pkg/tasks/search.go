@@ -78,7 +78,6 @@ func SearchIndex() {
 		}
 
 		db, _ := models.GetDB()
-		defer db.Close()
 
 		total := 0
 		offset := 0

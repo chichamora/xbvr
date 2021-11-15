@@ -20,7 +20,6 @@ func GeneratePreviews() {
 		models.CreateLock("previews")
 
 		db, _ := models.GetDB()
-		defer db.Close()
 
 		var scenes []models.Scene
 		db.Model(&models.Scene{}).Where("is_available = ?", true).Where("has_video_preview = ?", false).Order("release_date desc").Find(&scenes)

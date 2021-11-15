@@ -58,7 +58,6 @@ var RecentIPAddresses []string
 
 func LoadConfig() {
 	db, _ := models.GetDB()
-	defer db.Close()
 
 	var obj models.KV
 	err := db.Where(&models.KV{Key: "config"}).First(&obj).Error

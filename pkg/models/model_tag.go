@@ -17,7 +17,6 @@ type Tag struct {
 
 func (t *Tag) Save() error {
 	db, _ := GetDB()
-	defer db.Close()
 
 	var err error
 	err = retry.Do(

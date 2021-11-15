@@ -50,7 +50,6 @@ func runScrapers(knownScenes []string, toScrape string, updateSite bool, collect
 	} else {
 		db.Where(&models.Site{ID: toScrape}).Find(&sites)
 	}
-	db.Close()
 
 	var wg sync.WaitGroup
 
@@ -81,7 +80,6 @@ func sceneDBWriter(wg *sync.WaitGroup, i *uint64, scenes <-chan models.ScrapedSc
 	defer wg.Done()
 
 	db, _ := models.GetDB()
-	defer db.Close()
 	for scene := range scenes {
 		if os.Getenv("DEBUG") != "" {
 			log.Printf("Saving %v", scene.SceneID)
@@ -97,7 +95,6 @@ func sceneDBWriter(wg *sync.WaitGroup, i *uint64, scenes <-chan models.ScrapedSc
 func ReapplyEdits() {
 	var actions []models.Action
 	db, _ := models.GetDB()
-	defer db.Close()
 	db.Find(&actions)
 
 	for _, a := range actions {
@@ -160,7 +157,6 @@ func Scrape(toScrape string) {
 		var scenes []models.Scene
 		db, _ := models.GetDB()
 		db.Find(&scenes)
-		db.Close()
 
 		var knownScenes []string
 		for i := range scenes {
@@ -216,7 +212,6 @@ func ScrapeJAVR(queryString string) {
 		var scenes []models.Scene
 		db, _ := models.GetDB()
 		db.Find(&scenes)
-		db.Close()
 
 		var knownScenes []string
 		for i := range scenes {
@@ -234,7 +229,6 @@ func ScrapeJAVR(queryString string) {
 			for i := range collectedScenes {
 				models.SceneCreateUpdateFromExternal(db, collectedScenes[i])
 			}
-			db.Close()
 
 			tlog.Infof("Updating tag counts")
 			CountTags()
@@ -301,7 +295,6 @@ func ImportBundle(url string) {
 				tlog.Infof("Importing %v of %v scenes", i+1, len(bundleData.Scenes))
 				models.SceneCreateUpdateFromExternal(db, bundleData.Scenes[i])
 			}
-			db.Close()
 
 			tlog.Infof("Import complete")
 		} else {
@@ -313,7 +306,6 @@ func ImportBundle(url string) {
 
 func RenameTags() {
 	db, _ := models.GetDB()
-	defer db.Close()
 
 	var scenes []models.Scene
 	db.Find(&scenes)
@@ -347,7 +339,6 @@ func RenameTags() {
 
 func CountTags() {
 	db, _ := models.GetDB()
-	defer db.Close()
 
 	var tags []models.Tag
 	db.Model(&models.Tag{}).Find(&tags)

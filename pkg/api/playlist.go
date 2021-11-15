@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	"github.com/emicklei/go-restful"
-	"github.com/emicklei/go-restful-openapi"
+	restfulspec "github.com/emicklei/go-restful-openapi"
 	"github.com/jinzhu/gorm"
 	"github.com/xbapps/xbvr/pkg/models"
 )
@@ -50,7 +50,6 @@ func (i PlaylistResource) WebService() *restful.WebService {
 
 func (i PlaylistResource) listPlaylists(req *restful.Request, resp *restful.Response) {
 	db, _ := models.GetDB()
-	defer db.Close()
 
 	var playlists []models.Playlist
 	db.Order("ordering asc").Find(&playlists)
@@ -65,9 +64,6 @@ func (i PlaylistResource) createPlaylist(req *restful.Request, resp *restful.Res
 		APIError(req, resp, http.StatusInternalServerError, err)
 		return
 	}
-
-	db, _ := models.GetDB()
-	defer db.Close()
 
 	nv := models.Playlist{Name: r.Name, IsDeoEnabled: r.IsDeoEnabled, IsSmart: r.IsSmart, SearchParams: r.SearchParams}
 	nv.Save()
@@ -90,7 +86,6 @@ func (i PlaylistResource) updatePlaylist(req *restful.Request, resp *restful.Res
 	}
 
 	db, _ := models.GetDB()
-	defer db.Close()
 
 	playlist := models.Playlist{}
 	err = db.First(&playlist, id).Error
@@ -116,7 +111,6 @@ func (i PlaylistResource) removePlaylist(req *restful.Request, resp *restful.Res
 	}
 
 	db, _ := models.GetDB()
-	defer db.Close()
 
 	playlist := models.Playlist{}
 	err = db.First(&playlist, id).Error

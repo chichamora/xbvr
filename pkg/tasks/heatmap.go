@@ -51,7 +51,6 @@ func GenerateHeatmaps(tlog *logrus.Entry) {
 		models.CreateLock("heatmaps")
 
 		db, _ := models.GetDB()
-		defer db.Close()
 
 		var scriptfiles []models.File
 		db.Model(&models.File{}).Preload("Volume").Where("type = ?", "script").Where("has_heatmap = ?", false).Find(&scriptfiles)

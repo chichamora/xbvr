@@ -9,7 +9,6 @@ type KV struct {
 
 func (o *KV) Save() {
 	db, _ := GetDB()
-	defer db.Close()
 
 	var err error
 	err = retry.Do(
@@ -30,5 +29,4 @@ func (o *KV) Save() {
 func (o *KV) Delete() {
 	db, _ := GetDB()
 	db.Delete(&o)
-	db.Close()
 }

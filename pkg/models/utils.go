@@ -10,7 +10,6 @@ type DMSData struct {
 
 func GetDMSData() DMSData {
 	db, _ := GetDB()
-	defer db.Close()
 
 	// Get all accessible scenes
 	var scenes []Scene

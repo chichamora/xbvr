@@ -419,7 +419,6 @@ func (me *contentDirectoryService) Handle(action string, argsXML []byte, r *http
 				var savedPlaylists []models.Playlist
 				db, _ := models.GetDB()
 				db.Where("is_deo_enabled = ?", true).Order("ordering asc").Find(&savedPlaylists)
-				db.Close()
 
 				for _, playlist := range savedPlaylists {
 					objs = append(objs, upnpav.Container{Object: upnpav.Object{
@@ -438,7 +437,6 @@ func (me *contentDirectoryService) Handle(action string, argsXML []byte, r *http
 				var savedPlaylist models.Playlist
 				db, _ := models.GetDB()
 				db.Where("id = ?", id[1]).First(&savedPlaylist)
-				db.Close()
 
 				var r models.RequestSceneList
 				if err := json.Unmarshal([]byte(savedPlaylist.SearchParams), &r); err == nil {
@@ -569,7 +567,6 @@ func (me *contentDirectoryService) Handle(action string, argsXML []byte, r *http
 				var files []models.File
 				db, _ := models.GetDB()
 				db.Model(&files).Where("files.scene_id = 0").Find(&files)
-				db.Close()
 
 				for i := range files {
 					if _, err := os.Stat(filepath.Join(files[i].Path, files[i].Filename)); err == nil {

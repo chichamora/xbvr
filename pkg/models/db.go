@@ -13,6 +13,7 @@ import (
 
 var log = &common.Log
 var dbConn *dburl.URL
+var db *gorm.DB
 var supportedDB = []string{"mysql", "sqlite3"}
 
 func parseDBConnString() {
@@ -55,9 +56,11 @@ func GetDB() (*gorm.DB, error) {
 		log.Debug("Getting DB handle from ", common.GetCallerFunctionName())
 	}
 
-	var db *gorm.DB
 	var err error
 
+	if db != nil {
+		return db, nil
+	}
 	err = retry.Do(
 		func() error {
 			db, err = gorm.Open(dbConn.Driver, dbConn.DSN)
@@ -66,6 +69,10 @@ func GetDB() (*gorm.DB, error) {
 				return err
 			}
 			sqlDb := db.DB()
+
+			log.Debug("DB Max Idle Conns: ", common.EnvConfig.DatabaseMaxIdleConns)
+			log.Debug("DB Max Open Conns: ", common.EnvConfig.DatabaseMaxOpenConns)
+			log.Debug("DB Conn Max Lifetime: ", common.EnvConfig.DatabaseConnMaxLifetime)
 			sqlDb.SetMaxIdleConns(common.EnvConfig.DatabaseMaxIdleConns)
 			sqlDb.SetMaxOpenConns(common.EnvConfig.DatabaseMaxOpenConns)
 			sqlDb.SetConnMaxLifetime(common.EnvConfig.DatabaseConnMaxLifetime)
@@ -91,7 +98,6 @@ func CreateLock(lock string) {
 
 func CheckLock(lock string) bool {
 	db, _ := GetDB()
-	defer db.Close()
 
 	var obj KV
 	err := db.Where(&KV{Key: "lock-" + lock}).First(&obj).Error
@@ -103,7 +109,6 @@ func CheckLock(lock string) bool {
 
 func RemoveLock(lock string) {
 	db, _ := GetDB()
-	defer db.Close()
 
 	var obj KV
 	db.Where(&KV{Key: "lock-" + lock}).Delete(&obj)

@@ -29,7 +29,6 @@ type SceneCuepoint struct {
 
 func (o *SceneCuepoint) Save() error {
 	db, _ := GetDB()
-	defer db.Close()
 
 	var err error
 	err = retry.Do(
@@ -105,7 +104,6 @@ type Image struct {
 
 func (i *Scene) Save() error {
 	db, _ := GetDB()
-	defer db.Close()
 
 	var err error
 	err = retry.Do(
@@ -135,7 +133,6 @@ func (i *Scene) FromJSON(data []byte) error {
 
 func (o *Scene) GetIfExist(id string) error {
 	db, _ := GetDB()
-	defer db.Close()
 
 	return db.
 		Preload("Tags").
@@ -148,7 +145,6 @@ func (o *Scene) GetIfExist(id string) error {
 
 func (o *Scene) GetIfExistByPK(id uint) error {
 	db, _ := GetDB()
-	defer db.Close()
 
 	return db.
 		Preload("Tags").
@@ -161,7 +157,6 @@ func (o *Scene) GetIfExistByPK(id uint) error {
 
 func (o *Scene) GetIfExistURL(u string) error {
 	db, _ := GetDB()
-	defer db.Close()
 
 	return db.
 		Preload("Tags").
@@ -189,7 +184,6 @@ func (o *Scene) GetFunscriptTitle() string {
 
 func (o *Scene) GetFiles() ([]File, error) {
 	db, _ := GetDB()
-	defer db.Close()
 
 	var files []File
 	db.Preload("Volume").Where(&File{SceneID: o.ID}).Find(&files)
@@ -199,7 +193,6 @@ func (o *Scene) GetFiles() ([]File, error) {
 
 func (o *Scene) GetTotalWatchTime() int {
 	db, _ := GetDB()
-	defer db.Close()
 
 	totalResult := struct{ Total float64 }{}
 	db.Raw(`select sum(duration) as total from histories where scene_id = ?`, o.ID).Scan(&totalResult)
@@ -209,7 +202,6 @@ func (o *Scene) GetTotalWatchTime() int {
 
 func (o *Scene) GetVideoFiles() ([]File, error) {
 	db, _ := GetDB()
-	defer db.Close()
 
 	var files []File
 	db.Preload("Volume").Where("scene_id = ? AND type = ?", o.ID, "video").Find(&files)
@@ -219,7 +211,6 @@ func (o *Scene) GetVideoFiles() ([]File, error) {
 
 func (o *Scene) GetScriptFiles() ([]File, error) {
 	db, _ := GetDB()
-	defer db.Close()
 
 	var files []File
 	db.Preload("Volume").Where("scene_id = ? AND type = ?", o.ID, "script").Order("is_selected_script DESC, created_time DESC").Find(&files)
@@ -478,7 +469,6 @@ func QueryScenes(r RequestSceneList, enablePreload bool) ResponseSceneList {
 	offset := r.Offset.OrElse(0)
 
 	db, _ := GetDB()
-	defer db.Close()
 
 	var scenes []Scene
 	tx := db.Model(&scenes)

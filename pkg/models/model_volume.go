@@ -42,7 +42,6 @@ func (o *Volume) IsMounted() bool {
 
 func (o *Volume) Save() error {
 	db, _ := GetDB()
-	defer db.Close()
 
 	var err error
 	err = retry.Do(
@@ -66,7 +65,6 @@ func (o *Volume) Files() []File {
 	var allFiles []File
 	db, _ := GetDB()
 	db.Preload("Volume").Where("volume_id = ?", o.ID).Find(&allFiles)
-	db.Close()
 	return allFiles
 }
 
@@ -78,7 +76,6 @@ func (o *Volume) GetPutIOClient() *putio.Client {
 
 func CheckVolumes() {
 	db, _ := GetDB()
-	defer db.Close()
 
 	var vol []Volume
 	db.Find(&vol)

@@ -22,7 +22,6 @@ type Playlist struct {
 
 func (o *Playlist) Save() error {
 	db, _ := GetDB()
-	defer db.Close()
 
 	var err error
 	err = retry.Do(
