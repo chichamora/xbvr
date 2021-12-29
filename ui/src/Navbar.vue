@@ -61,23 +61,7 @@ export default {
     }
   },
   mounted () {
-    ky.get('/api/options/version-check').json().then(data => {
-      this.currentVersion = data.current_version
-      this.latestVersion = data.latest_version
-
-      if (data.update_notify && this.currentVersion !== 'CURRENT') {
-        this.$buefy.snackbar.open({
-          message: `Version ${this.latestVersion} available!`,
-          type: 'is-warning',
-          position: 'is-top',
-          actionText: this.$t('Download now'),
-          indefinite: true,
-          onAction: () => {
-            window.location = 'https://github.com/xbapps/xbvr/releases'
-          }
-        })
-      }
-    })
+    
   }
 }
 </script>
